@@ -392,7 +392,7 @@ Press/Type/Enter on the iphone's screen to power shut off...
 <div class="spinner"></div>
 <div class="boot-status" id="bootStatus">Starting System ...</div>
 <div class="download-progress" id="dlProgressWrap"><div class="bar" id="dlProgressBar"></div></div>
-<div class="dl-status" id="dlStatus">⏳ Caching App Icons ...</div>
+<div class="dl-status" id="dlStatus">⏳ Downloading assets ...</div>
 </div>
 </div>
 
@@ -738,100 +738,100 @@ const extOf = n => {const p=String(n||'').split('.');return p.length>1?p.pop().t
 const svgDataUri = svg => 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
 const emojiIcon = (emoji) => svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#fff"/><text x="256" y="350" font-family="Arial" font-size="280" text-anchor="middle" dominant-baseline="central">${emoji}</text></svg>`);
 
-// ------------------- APP ICONS -------------------
+// ------------------- APP ICONS (IMGBB + CLOUDINARY) -------------------
 const I = {
-  whatsapp: 'https://i.imgur.com/6Z1k4vX.png',
-  instagram: 'https://i.imgur.com/2B1sF4w.png',
-  facebook: 'https://i.imgur.com/8Q4jX4w.png',
-  snapchat: 'https://i.imgur.com/9hU8y4w.png',
-  x: 'https://i.imgur.com/7Yw7Q4w.png',
-  linkedin: 'https://i.imgur.com/3Jv7Z4w.png',
-  pinterest: 'https://i.imgur.com/5Nf8Q4w.png',
-  threads: 'https://i.imgur.com/8cZ7Z4w.png',
-  reddit: 'https://i.imgur.com/2Nf8Q4w.png',
-  discord: 'https://i.imgur.com/4cZ7Z4w.png',
-  sharechat: 'https://i.imgur.com/6Q4jX4w.png',
-  telegram: 'https://i.imgur.com/5hU8y4w.png',
-  signal: 'https://i.imgur.com/7Yw7Q4w.png',
-  wechat: 'https://i.imgur.com/3Jv7Z4w.png',
-  imo: 'https://i.imgur.com/5Nf8Q4w.png',
-  messenger: 'https://i.imgur.com/8cZ7Z4w.png',
-  wabusiness: 'https://i.imgur.com/2Nf8Q4w.png',
-  truecaller: 'https://i.imgur.com/4cZ7Z4w.png',
-  zoom: 'https://i.imgur.com/6Q4jX4w.png',
-  teams: 'https://i.imgur.com/5hU8y4w.png',
-  meet: 'https://i.imgur.com/7Yw7Q4w.png',
-  skype: 'https://i.imgur.com/3Jv7Z4w.png',
-  viber: 'https://i.imgur.com/5Nf8Q4w.png',
-  line: 'https://i.imgur.com/8cZ7Z4w.png',
-  youtube: 'https://i.imgur.com/2Nf8Q4w.png',
-  netflix: 'https://i.imgur.com/4cZ7Z4w.png',
-  primevideo: 'https://i.imgur.com/6Q4jX4w.png',
-  jiohotstar: 'https://i.imgur.com/5hU8y4w.png',
-  disneyplus: 'https://i.imgur.com/7Yw7Q4w.png',
-  spotify: 'https://i.imgur.com/3Jv7Z4w.png',
-  ytmusic: 'https://i.imgur.com/5Nf8Q4w.png',
-  jiosaavn: 'https://i.imgur.com/8cZ7Z4w.png',
-  wynk: 'https://i.imgur.com/2Nf8Q4w.png',
-  gaana: 'https://i.imgur.com/4cZ7Z4w.png',
-  mxplayer: 'https://i.imgur.com/6Q4jX4w.png',
-  tiktok: 'https://i.imgur.com/5hU8y4w.png',
-  twitch: 'https://i.imgur.com/7Yw7Q4w.png',
-  ytkids: 'https://i.imgur.com/3Jv7Z4w.png',
-  phonepe: 'https://i.imgur.com/5Nf8Q4w.png',
-  gpay: 'https://i.imgur.com/8cZ7Z4w.png',
-  paytm: 'https://i.imgur.com/2Nf8Q4w.png',
-  bhim: 'https://i.imgur.com/4cZ7Z4w.png',
-  cred: 'https://i.imgur.com/6Q4jX4w.png',
-  yono: 'https://i.imgur.com/5hU8y4w.png',
-  imobile: 'https://i.imgur.com/7Yw7Q4w.png',
-  hdfc: 'https://i.imgur.com/3Jv7Z4w.png',
-  paypal: 'https://i.imgur.com/5Nf8Q4w.png',
-  navi: 'https://i.imgur.com/8cZ7Z4w.png',
-  amazon: 'https://i.imgur.com/2Nf8Q4w.png',
-  flipkart: 'https://i.imgur.com/4cZ7Z4w.png',
-  meesho: 'https://i.imgur.com/6Q4jX4w.png',
-  myntra: 'https://i.imgur.com/5hU8y4w.png',
-  ajio: 'https://i.imgur.com/7Yw7Q4w.png',
-  nykaa: 'https://i.imgur.com/3Jv7Z4w.png',
-  tatacliq: 'https://i.imgur.com/5Nf8Q4w.png',
-  swiggy: 'https://i.imgur.com/8cZ7Z4w.png',
-  zomato: 'https://i.imgur.com/2Nf8Q4w.png',
-  blinkit: 'https://i.imgur.com/4cZ7Z4w.png',
-  zepto: 'https://i.imgur.com/6Q4jX4w.png',
-  instamart: 'https://i.imgur.com/5hU8y4w.png',
-  temu: 'https://i.imgur.com/7Yw7Q4w.png',
-  aliexpress: 'https://i.imgur.com/3Jv7Z4w.png',
-  chatgpt: 'https://i.imgur.com/5Nf8Q4w.png',
-  gemini: 'https://i.imgur.com/8cZ7Z4w.png',
-  gmail: 'https://i.imgur.com/2Nf8Q4w.png',
-  gdrive: 'https://i.imgur.com/4cZ7Z4w.png',
-  gdocs: 'https://i.imgur.com/6Q4jX4w.png',
-  gsheets: 'https://i.imgur.com/5hU8y4w.png',
-  outlook: 'https://i.imgur.com/7Yw7Q4w.png',
-  msword: 'https://i.imgur.com/3Jv7Z4w.png',
-  msexcel: 'https://i.imgur.com/5Nf8Q4w.png',
-  canva: 'https://i.imgur.com/8cZ7Z4w.png',
-  notion: 'https://i.imgur.com/2Nf8Q4w.png',
-  camscanner: 'https://i.imgur.com/4cZ7Z4w.png',
-  adobeacrobat: 'https://i.imgur.com/6Q4jX4w.png',
-  gtranslate: 'https://i.imgur.com/5hU8y4w.png',
-  gmaps: 'https://i.imgur.com/7Yw7Q4w.png',
-  uber: 'https://i.imgur.com/3Jv7Z4w.png',
-  ola: 'https://i.imgur.com/5Nf8Q4w.png',
-  rapido: 'https://i.imgur.com/8cZ7Z4w.png',
-  irctc: 'https://i.imgur.com/2Nf8Q4w.png',
-  wimt: 'https://i.imgur.com/4cZ7Z4w.png',
-  makemytrip: 'https://i.imgur.com/6Q4jX4w.png',
-  goibibo: 'https://i.imgur.com/5hU8y4w.png',
-  booking: 'https://i.imgur.com/7Yw7Q4w.png',
-  redbus: 'https://i.imgur.com/3Jv7Z4w.png',
-  capcut: 'https://i.imgur.com/5Nf8Q4w.png',
-  picsart: 'https://i.imgur.com/8cZ7Z4w.png',
-  lightroom: 'https://i.imgur.com/2Nf8Q4w.png',
-  inshot: 'https://i.imgur.com/4cZ7Z4w.png',
-  snapseed: 'https://i.imgur.com/6Q4jX4w.png',
-  gphotos: 'https://i.imgur.com/5hU8y4w.png',
+  whatsapp: 'https://i.ibb.co/XgFQSs9/icons8-whatsapp-96.png',
+  instagram: 'https://i.ibb.co/TDg0V2wt/icons8-instagram-96.png',
+  facebook: 'https://i.ibb.co/7xSXz3xW/icons8-facebook-96.png',
+  snapchat: 'https://i.ibb.co/G4PYcJfq/icons8-snapchat-96.png',
+  x: 'https://i.ibb.co/MLTDqnX/icons8-x-logo-100.png',
+  linkedin: 'https://i.ibb.co/mVj5VHkB/icons8-linkedin-96.png',
+  pinterest: 'https://i.ibb.co/tdvCysv/icons8-pinterest-96.png',
+  threads: 'https://i.ibb.co/GfrftWPy/icons8-threads-100.png',
+  reddit: 'https://i.ibb.co/Pv9Hjcvj/icons8-reddit-100.png',
+  discord: 'https://i.ibb.co/xKCtBPtr/icons8-discord-96.png',
+  sharechat: 'https://i.ibb.co/LXsqJTVS/sharechat.png',
+  telegram: 'https://i.ibb.co/B5N4fVm0/icons8-telegram-app-96.png',
+  signal: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#3A76F0"/><path d="M256 150 C340 150 380 220 380 280 C380 340 340 380 256 380 C200 380 170 360 150 340 L120 370 L140 320 C130 300 130 280 130 260 C130 200 180 150 256 150 Z" fill="#fff"/></svg>`),
+  wechat: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#07C160"/><circle cx="200" cy="250" r="80" fill="#fff"/><circle cx="310" cy="280" r="70" fill="#fff"/></svg>`),
+  imo: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#2C9AFA"/><text x="256" y="330" font-family="Arial" font-weight="700" font-size="240" text-anchor="middle" fill="#fff">imo</text></svg>`),
+  messenger: 'https://i.ibb.co/KxdGHBSL/icons8-messenger-96.png',
+  wabusiness: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#25D366"/><path d="M160 380 L170 330 A120 120 0 1 1 190 350 Z" fill="none" stroke="#fff" stroke-width="20"/><text x="256" y="290" font-family="Arial" font-weight="700" font-size="80" text-anchor="middle" fill="#fff">B</text></svg>`),
+  truecaller: 'https://i.ibb.co/XfkHxKQF/icons8-truecaller-100.png',
+  zoom: 'https://i.ibb.co/LhXbchZJ/icons8-zoom-96.png',
+  teams: 'https://i.ibb.co/5WWLxHmF/icons8-microsoft-teams-96.png',
+  meet: 'https://i.ibb.co/YFQ0GnKx/icons8-google-meet-96.png',
+  skype: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#00AFF0"/><circle cx="256" cy="256" r="100" fill="#fff"/></svg>`),
+  viber: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#665CAC"/><text x="256" y="330" font-family="Arial" font-weight="700" font-size="240" text-anchor="middle" fill="#fff">V</text></svg>`),
+  line: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#00C300"/><path d="M256 140 C340 140 400 190 400 260 C400 330 340 380 256 380 C230 380 200 370 180 360 L140 380 L150 340 C140 320 130 290 130 260 C130 190 180 140 256 140 Z" fill="#fff"/></svg>`),
+  youtube: 'https://i.ibb.co/Y7LkGsD9/icons8-youtube-96.png',
+  netflix: 'https://i.ibb.co/sv4Bqzw2/icons8-netflix-100.png',
+  primevideo: 'https://i.ibb.co/Kz6T3mm8/icons8-amazon-prime-video-96.png',
+  jiohotstar: 'https://i.ibb.co/NnCBWxNZ/vecteezy-jiohotstar-app-icon-on-transparent-background-56505637.png',
+  disneyplus: 'https://i.ibb.co/ybpWtC2/icons8-disney-96.png',
+  spotify: 'https://i.ibb.co/fd2p0C6g/icons8-spotify-96.png',
+  ytmusic: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#FF0000"/><circle cx="256" cy="256" r="140" fill="none" stroke="#fff" stroke-width="20"/><path d="M230 200 L320 256 L230 312 Z" fill="#fff"/></svg>`),
+  jiosaavn: 'https://i.ibb.co/8gLnZ5St/jiosaavnlogo.png',
+  wynk: 'https://i.ibb.co/XxkBVB5P/icons8-wynk-music-96.png',
+  gaana: 'https://i.ibb.co/YHpDsmH/icons8-gaana-96.png',
+  mxplayer: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#FF6A00"/><text x="256" y="330" font-family="Arial" font-weight="700" font-size="200" text-anchor="middle" fill="#fff">MX</text></svg>`),
+  tiktok: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#000"/><text x="256" y="330" font-family="Arial" font-weight="700" font-size="240" text-anchor="middle" fill="#fff">♪</text></svg>`),
+  twitch: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#9146FF"/><path d="M150 140 L360 140 L360 300 L280 380 L210 380 L210 340 L150 340 Z" fill="#fff"/></svg>`),
+  ytkids: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#FF0000"/><text x="256" y="330" font-family="Arial" font-weight="700" font-size="180" text-anchor="middle" fill="#fff">Kids</text></svg>`),
+  phonepe: 'https://i.ibb.co/qLtCmhMg/icons8-phone-pe-96.png',
+  gpay: 'https://i.ibb.co/fYqYzTFV/icons8-google-pay-96.png',
+  paytm: 'https://i.ibb.co/N6vxH4cV/icons8-paytm-96.png',
+  bhim: 'https://i.ibb.co/3YTh9Z25/icons8-bhim-96.png',
+  cred: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#0B0B0B"/><text x="256" y="330" font-family="Arial" font-weight="700" font-size="180" text-anchor="middle" fill="#fff">CRED</text></svg>`),
+  yono: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#224B9B"/><text x="256" y="330" font-family="Arial" font-weight="700" font-size="200" text-anchor="middle" fill="#fff">YONO</text></svg>`),
+  imobile: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#F3722C"/><text x="256" y="330" font-family="Arial" font-weight="700" font-size="180" text-anchor="middle" fill="#fff">iMobile</text></svg>`),
+  hdfc: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#004B8F"/><text x="256" y="330" font-family="Arial" font-weight="700" font-size="200" text-anchor="middle" fill="#fff">HDFC</text></svg>`),
+  paypal: 'https://i.ibb.co/9mmyK606/icons8-paypal-96.png',
+  navi: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#0056FF"/><text x="256" y="330" font-family="Arial" font-weight="700" font-size="240" text-anchor="middle" fill="#fff">N</text></svg>`),
+  amazon: 'https://i.ibb.co/qfxXQG3/icons8-amazon-96.png',
+  flipkart: 'https://i.ibb.co/TDPK9JdC/icons8-flipkart-100.png',
+  meesho: 'https://i.ibb.co/HTGFxfwR/meesho.jpg',
+  myntra: 'https://i.ibb.co/SDCxmY7R/myntra.jpg',
+  ajio: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#2C2C2C"/><text x="256" y="330" font-family="Arial" font-weight="700" font-size="200" text-anchor="middle" fill="#fff">AJIO</text></svg>`),
+  nykaa: 'https://i.ibb.co/QvzPxqBN/nykaa.jpg',
+  tatacliq: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#2B2B2B"/><text x="256" y="330" font-family="Arial" font-weight="700" font-size="160" text-anchor="middle" fill="#fff">CLiQ</text></svg>`),
+  swiggy: 'https://i.ibb.co/fz6F10H9/swiggy.jpg',
+  zomato: 'https://i.ibb.co/TDYj7mmg/zomato.jpg',
+  blinkit: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#F8CB46"/><text x="256" y="330" font-family="Arial" font-weight="700" font-size="200" text-anchor="middle" fill="#333">B</text></svg>`),
+  zepto: 'https://i.ibb.co/wrBV3hft/zepto.jpg',
+  instamart: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#FFC72C"/><text x="256" y="330" font-family="Arial" font-weight="700" font-size="160" text-anchor="middle" fill="#333">IM</text></svg>`),
+  temu: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#FF7A00"/><text x="256" y="330" font-family="Arial" font-weight="700" font-size="200" text-anchor="middle" fill="#fff">T</text></svg>`),
+  aliexpress: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#FF4747"/><text x="256" y="330" font-family="Arial" font-weight="700" font-size="160" text-anchor="middle" fill="#fff">Ali</text></svg>`),
+  chatgpt: 'https://i.ibb.co/ynDdcp1q/icons8-chatgpt-100.png',
+  gemini: 'https://i.ibb.co/YFtFbXdh/icons8-gemini-ai-96.png',
+  gmail: 'https://i.ibb.co/4nMQHYfD/icons8-gmail-96-2.png',
+  gdrive: 'https://i.ibb.co/h129c25k/icons8-drive-96.png',
+  gdocs: 'https://i.ibb.co/Q76V75yf/icons8-docs-96.png',
+  gsheets: 'https://i.ibb.co/9mr9xz2k/icons8-google-sheets-96.png',
+  outlook: 'https://i.ibb.co/SXN0QbW3/icons8-outlook-96.png',
+  msword: 'https://i.ibb.co/R4Hz1Vyk/icons8-word-96.png',
+  msexcel: 'https://i.ibb.co/h1FBHfWq/icons8-excel-96.png',
+  canva: 'https://i.ibb.co/whSK6mts/icons8-canva-96.png',
+  notion: 'https://i.ibb.co/gLqGwfPz/icons8-notion-96.png',
+  camscanner: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#1A73E8"/><rect x="160" y="160" width="192" height="192" rx="20" fill="none" stroke="#fff" stroke-width="20"/><circle cx="256" cy="256" r="50" fill="none" stroke="#fff" stroke-width="16"/></svg>`),
+  adobeacrobat: 'https://i.ibb.co/7J8gTQtF/icons8-acrobat-100.png',
+  gtranslate: 'https://i.ibb.co/jkp1nhZv/icons8-google-translate-96.png',
+  gmaps: 'https://i.ibb.co/2YZfBF9x/icons8-google-maps-96.png',
+  uber: 'https://i.ibb.co/fzzwPz85/icons8-uber-100.png',
+  ola: 'https://i.ibb.co/b50TTmL5/ola.jpg',
+  rapido: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#F9C935"/><text x="256" y="330" font-family="Arial" font-weight="700" font-size="180" text-anchor="middle" fill="#333">Rapido</text></svg>`),
+  irctc: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#003A70"/><text x="256" y="330" font-family="Arial" font-weight="700" font-size="200" text-anchor="middle" fill="#fff">IR</text></svg>`),
+  wimt: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#00B4FF"/><text x="256" y="330" font-family="Arial" font-weight="700" font-size="200" text-anchor="middle" fill="#fff">Train</text></svg>`),
+  makemytrip: 'https://i.ibb.co/FqD2d2WS/Make-My-Trip-App-Logo.png',
+  goibibo: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#F26622"/><text x="256" y="330" font-family="Arial" font-weight="700" font-size="200" text-anchor="middle" fill="#fff">Go</text></svg>`),
+  booking: 'https://i.ibb.co/Z9vX2Ls/booking.jpg',
+  redbus: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#D32F2F"/><text x="256" y="330" font-family="Arial" font-weight="700" font-size="200" text-anchor="middle" fill="#fff">red</text></svg>`),
+  capcut: 'https://i.ibb.co/wNJVdT04/capcut.jpg',
+  picsart: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#C209C1"/><text x="256" y="330" font-family="Arial" font-weight="700" font-size="180" text-anchor="middle" fill="#fff">P</text></svg>`),
+  lightroom: 'https://i.ibb.co/prPLNyJZ/lightroom.jpg',
+  inshot: 'https://i.ibb.co/4nj5zkBk/icons8-inshot-96.png',
+  snapseed: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#4CAF50"/><text x="256" y="330" font-family="Arial" font-weight="700" font-size="180" text-anchor="middle" fill="#fff">Sn</text></svg>`),
+  gphotos: 'https://i.ibb.co/DfWqdMZD/icons8-google-photos-96.png',
   // System icons
   appstore: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#FF9500"/><path d="M180 200 h152 v200 h-152 z" fill="#fff"/><path d="M210 200 v-30 a40 40 0 0 1 80 0 v30" fill="none" stroke="#fff" stroke-width="20"/></svg>`),
   kcnxPlayer: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#ff6b35"/><circle cx="256" cy="256" r="150" fill="none" stroke="#fff" stroke-width="22"/><path d="M210 176 L360 256 L210 336 Z" fill="#fff"/></svg>`),
@@ -947,7 +947,6 @@ const STORE_APP_LIST = [
   {name:'RedBus', icon:I.redbus, url:'https://redbus.in'}
 ];
 
-// Combine for full app list resolution
 const APPS = APP_LIST;
 const STORE_APPS = STORE_APP_LIST.map(a => ({...a, id: 'store_' + a.name.replace(/\s+/g, '_').toLowerCase()}));
 const ALL_APPS = [...APPS, ...STORE_APPS];
@@ -978,7 +977,7 @@ const STORE = {
 
 const DB = {
   db:null,
-  open(){ return new Promise((res,rej)=>{ if(this.db) return res(); const r=indexedDB.open('kcnx_os_v2',1); r.onupgradeneeded=e=>{ const db=e.target.result; if(!db.objectStoreNames.contains('files')) db.createObjectStore('files',{keyPath:'id'}); }; r.onsuccess=()=>{ this.db=r.result; res(); }; r.onerror=()=>rej(r.error); }); },
+  open(){ return new Promise((res,rej)=>{ if(this.db) return res(); const r=indexedDB.open('kcnx_os_v3',1); r.onupgradeneeded=e=>{ const db=e.target.result; if(!db.objectStoreNames.contains('files')) db.createObjectStore('files',{keyPath:'id'}); }; r.onsuccess=()=>{ this.db=r.result; res(); }; r.onerror=()=>rej(r.error); }); },
   getAll(){ return new Promise((res,rej)=>{ if(!this.db) return res([]); const r=this.db.transaction('files','readonly').objectStore('files').getAll(); r.onsuccess=()=>res(r.result||[]); r.onerror=()=>rej(r.error); }); },
   put(f){ return new Promise((res,rej)=>{ if(!this.db) return rej(new Error('no db')); const r=this.db.transaction('files','readwrite').objectStore('files').put(f); r.onsuccess=()=>res(); r.onerror=()=>rej(r.error); }); },
   delete(id){ return new Promise((res,rej)=>{ if(!this.db) return rej(new Error('no db')); const r=this.db.transaction('files','readwrite').objectStore('files').delete(id); r.onsuccess=()=>res(); r.onerror=()=>rej(r.error); }); }
@@ -1039,10 +1038,15 @@ const AppLayout = {
   }
 };
 
-// Caching Mechanism for Icons during Boot
-async function cacheIcons() {
-  const urls = [...new Set(ALL_APPS.map(a => a.icon).filter(u => u.startsWith('http')))];
+// Caching Mechanism for Icons and Wallpapers during Boot
+async function cacheAssets() {
+  const urls = [
+    ...new Set(ALL_APPS.map(a => a.icon).filter(u => u.startsWith('http'))),
+    ...new Set(WALLPAPERS)
+  ];
   let cachedCount = 0;
+  const start = Date.now();
+  
   for (const url of urls) {
     try {
       const res = await fetch(url);
@@ -1052,17 +1056,28 @@ async function cacheIcons() {
         reader.onloadend = () => resolve(reader.result);
         reader.readAsDataURL(blob);
       });
-      // Replace the icon URL with the Base64 data URL in ALL_APPS
+      
+      // Replace the icon URL in ALL_APPS
       ALL_APPS.forEach(app => {
         if (app.icon === url) app.icon = dataUrl;
       });
-      cachedCount++;
-      $('dlProgressBar').style.width = ((cachedCount / urls.length) * 100) + '%';
-      $('dlStatus').textContent = `⏳ Caching: ${cachedCount} / ${urls.length}`;
+      
+      // Replace wallpaper URL
+      const wIdx = WALLPAPERS.indexOf(url);
+      if (wIdx !== -1) WALLPAPERS[wIdx] = dataUrl;
+      
     } catch (e) {
-      console.warn('Failed to cache icon:', url);
+      console.warn('Failed to cache asset:', url);
     }
+    cachedCount++;
+    $('dlProgressBar').style.width = ((cachedCount / urls.length) * 100) + '%';
+    $('dlStatus').textContent = `⏳ Caching: ${cachedCount} / ${urls.length}`;
   }
+  
+  // Ensure minimum 9 seconds total loading time
+  const elapsed = Date.now() - start;
+  const remaining = Math.max(0, 9000 - elapsed);
+  await new Promise(r => setTimeout(r, remaining));
 }
 
 let searchQuery = '';
@@ -1947,7 +1962,7 @@ const FileManager = {
     if(mime.startsWith('image/') || ['jpg','jpeg','png','gif','webp','bmp','svg','ico','avif'].includes(e)) return 'photos';
     if(mime.startsWith('video/') || ['mp4','mkv','mov','avi','webm'].includes(e)) return 'videos';
     if(mime.startsWith('audio/') || ['mp3','wav','ogg','flac','aac','m4a','opus'].includes(e)) return 'music';
-    if(mime.startsWith('text/') || mime==='application/json' || mime==='application/pdf' || ['pdf','doc','docx','xls','xlsx','ppt','pptx','txt','md','csv','json','xml'].includes(e)) return 'documents';
+    if(mime.startsWith('text/') || mime==='application/json' || mime==='application/pdf' || ['pdf','doc','docx','xls','xlsx','ppt','pptx','txt','md','csv','json','xml','zip','rar','tar','gz'].includes(e)) return 'documents';
     return 'other';
   },
   async upload(list){
@@ -2070,19 +2085,13 @@ $('bootInput').addEventListener('keydown', e=>{
 
 async function startBooting(){
   showScreen('booting');
-  let i = 0;
-  const steps = ['Starting System...','Loading preferences...','Checking versions...','Setting up device...'];
-  const iv = setInterval(()=>{
-    $('bootStatus').textContent = steps[i] || 'Ready!';
-    i++;
-    if(i >= steps.length){ clearInterval(iv); }
-  }, 600);
-  
+  $('bootStatus').textContent = 'Starting System...';
   $('dlProgressWrap').classList.add('show');
   
-  // Cache all icons during boot
-  await cacheIcons();
-
+  // Run 9 second cache
+  await cacheAssets();
+  
+  $('bootStatus').textContent = 'Ready!';
   setTimeout(showWelcome, 600);
 }
 
@@ -2110,9 +2119,22 @@ function init(){
   const customs = STORE.get('custom_apps', []);
   customs.forEach(c=>{ if(!APPS.find(a=>a.name===c.name)){ APPS.push({name:c.name, icon:c.icon, action:'customApp', html:c.html}); AppLayout.order.push(c.name); } });
   startClock();
-  showScreen('bootManager');
-  $('bootInput').focus();
+
+  // Check if booted before
+  if (STORE.get('kcnx_has_booted', false)) {
+    goLock();
+  } else {
+    showScreen('bootManager');
+    $('bootInput').focus();
+  }
 }
+
+// Mark as booted after first successful boot
+const originalGoLock = goLock;
+goLock = function() {
+  STORE.set('kcnx_has_booted', true);
+  originalGoLock();
+};
 
 init();
 
