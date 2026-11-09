@@ -17,7 +17,7 @@ body.ghost #ghostOverlay{opacity:1;backdrop-filter:blur(2px);}
 .screen{position:absolute;inset:0;z-index:1;display:none;flex-direction:column;background:#000;overflow:hidden;}
 .screen.active{display:flex;}
 /* Boot */
-#bootManager{justify-content:flex-start;padding:4cqh 4cqw;background:#000;font-size:clamp(11px,1.05cqw,22px);line-height:1.75;overflow-y:auto;}
+#bootManager{justify-content:flex-start;padding:4cqh 4cqw;background:#000;font-size:clamp(11px,1.05cqw,22px);line-height:1.75;overflow-y:auto;font-family:'Consolas','Courier New',monospace;}
 #bootManager .top-label{font-size:clamp(10px,.85cqw,18px);color:#aaa;margin-bottom:2.6cqh;letter-spacing:.5px;border-bottom:1px solid #222;padding-bottom:1cqh;}
 #bootManager .boot-text{white-space:pre-wrap;font-size:clamp(11px,1.05cqw,22px);line-height:1.85;}
 #bootManager .highlight{color:var(--accent);}
@@ -45,6 +45,11 @@ body.ghost #ghostOverlay{opacity:1;backdrop-filter:blur(2px);}
 #lockScreen{--panel-w:clamp(300px,28cqw,460px);z-index:2;background:transparent;justify-content:center;align-items:center;position:absolute;}
 #lockScreen .overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;pointer-events:none;z-index:10;background:rgba(0,0,0,.2);opacity:0;transition:opacity 1s ease;}
 #lockScreen .overlay.visible{opacity:1;}
+/* Draggable Windows 11 Icon */
+#msWindowsIcon{position:absolute;top:20%;left:20%;width:clamp(48px,6cqw,80px);height:clamp(48px,6cqw,80px);cursor:grab;z-index:50;transition:transform 0.1s;filter:drop-shadow(0 4px 6px rgba(0,0,0,0.4));}
+#msWindowsIcon:active{cursor:grabbing;transform:scale(0.95);}
+#msWindowsIcon svg{width:100%;height:100%;fill:#0078D7;}
+
 .lock-content{position:absolute;bottom:8cqh;right:6cqw;display:flex;flex-direction:column;align-items:flex-end;text-align:right;z-index:12;pointer-events:none;}
 .lock-time{font-weight:700;font-size:clamp(3rem,9cqw,8rem);letter-spacing:.02em;color:#fff;text-shadow:0 4px 30px rgba(0,0,0,.55);line-height:1;}
 .lock-date{font-size:clamp(.85rem,1.6cqw,1.7rem);font-weight:400;letter-spacing:.08em;color:rgba(255,255,255,.88);text-shadow:0 2px 20px rgba(0,0,0,.5);margin-top:.6cqh;text-transform:uppercase;}
@@ -319,7 +324,179 @@ body.ghost #ghostOverlay{opacity:1;backdrop-filter:blur(2px);}
 .file-preview-actions a,.file-preview-actions button{background:var(--accent);color:#001a33;border:none;border-radius:8px;padding:.9cqh 1.6cqw;font-family:inherit;font-weight:700;font-size:clamp(10px,.9cqw,14px);text-decoration:none;cursor:pointer;}
 .file-preview-actions button.ghost{background:rgba(255,255,255,.1);color:#fff;}
 .file-preview-pre{color:#e6e6e6;background:#111;padding:1.5cqh 1.5cqw;border-radius:8px;max-width:85cqw;max-height:58cqh;overflow:auto;white-space:pre-wrap;word-break:break-word;font-size:clamp(11px,1cqw,15px);line-height:1.55;border:1px solid rgba(255,255,255,.1);}
-/* Developer Mode Black and White */
+
+/* --- WIZARD & CONTROLS CSS --- */
+#topRightControls {
+  position: absolute;
+  top: 2.4cqh;
+  right: 2.4cqw;
+  display: none; /* Hidden by default until homescreen is loaded */
+  gap: 1cqw;
+  z-index: 9999;
+}
+.ctrl-btn {
+  background: rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  border-radius: 50%;
+  width: clamp(36px, 3.5cqw, 48px);
+  height: clamp(36px, 3.5cqw, 48px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(16px, 1.6cqw, 22px);
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: background 0.2s, transform 0.1s;
+  position: relative;
+}
+.ctrl-btn:hover {
+  background: rgba(255,255,255,0.2);
+}
+.ctrl-btn:active {
+  transform: scale(0.95);
+}
+
+/* Notification Items inside Settings */
+.notif-item {
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px;
+  padding: 1.2cqh 1.4cqw;
+  font-size: clamp(11px, 1cqw, 14px);
+  border-left: 3px solid var(--accent);
+  margin-bottom: 1cqh;
+}
+.notif-title { font-weight: 700; margin-bottom: 0.4cqh; color: #fff; }
+.notif-time { color: #888; font-size: 0.85em; margin-top: 0.4cqh; }
+
+/* Wizard Overlay */
+#wizardOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  z-index: 100000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 2cqh;
+}
+#wizardOverlay.show {
+  display: flex;
+}
+.wizard-content {
+  background: #ffffff;
+  color: #222;
+  border-radius: 12px;
+  padding: 3cqh 4cqw;
+  width: 100%;
+  max-width: 650px;
+  max-height: 88cqh;
+  overflow-y: auto;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+.wizard-content::-webkit-scrollbar { width: 8px; }
+.wizard-content::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+
+.wizard-content h2 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: clamp(20px, 2.2cqw, 28px);
+  color: #111;
+  margin-bottom: 2cqh;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 1.5cqh;
+}
+.wizard-logo {
+  width: 40px;
+  height: 40px;
+  background: #0078D7;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-weight: 900;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+.wizard-content p {
+  font-size: clamp(12px, 1.1cqw, 15px);
+  line-height: 1.6;
+  margin-bottom: 1.5cqh;
+  color: #333;
+}
+.wizard-content a {
+  color: #0066cc;
+  text-decoration: none;
+  font-weight: 600;
+}
+.wizard-content a:hover {
+  text-decoration: underline;
+}
+.warn-box {
+  background: #fff4e5;
+  border-left: 4px solid #ff9800;
+  padding: 2cqh;
+  border-radius: 4px;
+  margin: 2cqh 0;
+}
+.warn-box h3 {
+  color: #e65100;
+  font-size: clamp(14px, 1.2cqw, 18px);
+  margin-bottom: 1cqh;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+}
+.warn-box kbd {
+  background: #e0e0e0;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-family: inherit;
+  color: #000;
+  font-size: 1.1em;
+}
+.subscribe-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.5cqh 0;
+}
+.subscribe-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 1cqh;
+  font-size: clamp(12px, 1.1cqw, 15px);
+}
+.favicon {
+  width: calc(1em + 2px);
+  height: calc(1em + 2px);
+  object-fit: contain;
+}
+.understood-btn {
+  display: block;
+  width: 100%;
+  padding: 1.5cqh;
+  background: #0078D7;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: clamp(14px, 1.3cqw, 18px);
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 2cqh;
+  transition: background 0.2s;
+}
+.understood-btn:hover {
+  background: #005A9E;
+}
+
+/* Developer Mode */
 #devMode{position:fixed;inset:0;z-index:999999;background:#000;display:none;flex-direction:column;font-family:'Courier New',monospace;color:#fff;}
 #devMode.active{display:flex;}
 .dev-header{display:flex;justify-content:space-between;align-items:center;padding:1.4cqh 3cqw;border-bottom:1px solid #333;background:#111;flex-shrink:0;}
@@ -346,7 +523,9 @@ body.ghost .ghost-banner{display:block;}
 .shutdown-spinner{width:clamp(60px,7cqw,120px);height:clamp(60px,7cqw,120px);border:4px solid rgba(255,255,255,.1);border-top-color:#fff;border-right-color:#fff;border-radius:50%;animation:spin 1s linear infinite;}
 .shutdown-text{font-size:clamp(14px,1.4cqw,24px);color:#ddd;letter-spacing:.16em;text-transform:uppercase;}
 .shutdown-sub{font-size:clamp(10px,.9cqw,14px);color:#666;letter-spacing:.1em;}
-::-webkit-scrollbar{display:none;}
+::-webkit-scrollbar{width:8px;height:8px;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2);border-radius:4px;}
+::-webkit-scrollbar-track{background:transparent;}
 input,textarea,select,button{font-family:inherit;}
 input{caret-color:#fff;}
 </style>
@@ -360,6 +539,50 @@ input{caret-color:#fff;}
 <div class="ghost-banner">👻 Ghost Mode Active — press <span class="kbd">Alt</span> + <span class="kbd">Ins</span> to exit</div>
 
 <div id="os-container">
+
+<!-- TOP RIGHT CONTROLS (Fullscreen only) -->
+<div id="topRightControls">
+  <button id="fullscreenBtn" class="ctrl-btn" title="Fullscreen (F11)">□</button>
+</div>
+
+<!-- WIZARD OVERLAY - HIDDEN INITIALLY -->
+<div id="wizardOverlay">
+  <div class="wizard-content">
+    <h2>
+      <div class="wizard-logo">KCNX</div>
+      WELCOME TO KCNX OS
+    </h2>
+    
+    <p>This is to inform you that this is a website designed by KCNX. <br>©KCNX.2026,ⓒWebOS. All Rights Reserved.</p>
+    
+    <p>
+      <a href="https://downloadkcnx.pages.dev" target="_blank">Click Here</a> for privacy* and policy*.<br>
+      <a href="https://kcnxqclnprivacypolicy.pages.dev" target="_blank">Click Here</a> for developer's details.
+    </p>
+    
+    <div class="warn-box">
+      <h3>⚠️ PRIMARY FUNCTION</h3>
+      <p>Always Use <kbd>CTRL+W</kbd> or <kbd>CTRL+F4</kbd> to exit any app.</p>
+      <p>Always Click on <kbd>F11</kbd> in keyboard or <kbd>□</kbd> in mobile for full OS experience.</p>
+    </div>
+
+    <p>KCNX will add more apps and features for a light weight performance. You will have a Digital Store and Hybrid Features in the Coming Days.</p>
+    <p>To get notified for the latest updates:</p>
+    
+    <ul class="subscribe-list">
+      <li>
+        <img src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FF0000'%3E%3Cpath d='M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z'/%3E%3C/svg%3E" class="favicon" alt="YT">
+        Subscribe us on <a href="https://youtube.com/@kcnxofficial?si=RGfvavvR3Y481dE-" target="_blank">Youtube</a>
+      </li>
+      <li>
+        <img src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23E4405F'%3E%3Cpath d='M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z'/%3E%3C/svg%3E" class="favicon" alt="IG">
+        Follow us on <a href="https://www.instagram.com/kcnxofficialindia/?utm_source=ig_web_button_share_sheet" target="_blank">Instagram</a>
+      </li>
+    </ul>
+
+    <button id="wizardClose" class="understood-btn">Understood</button>
+  </div>
+</div>
 
 <!-- BOOT MANAGER -->
 <div id="bootManager" class="screen active">
@@ -404,6 +627,12 @@ Press/Type/Enter on the iphone's screen to power shut off...
 <!-- LOCK SCREEN -->
 <div id="lockScreen" class="screen">
 <div class="overlay" id="lockOverlay"></div>
+<!-- Draggable Windows 11 Icon -->
+<div id="msWindowsIcon">
+  <svg viewBox="0 0 88 88" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 12.4L36.8 7.6v34.8H0V12.4zM40.6 7L88 0v40.6H40.6V7zM0 46.2h36.8v34.8L0 76.2V46.2zM40.6 46.2H88V88l-47.4-6.6V46.2z"/>
+  </svg>
+</div>
 <div class="lock-content">
 <div class="lock-time" id="lockTime">10:47</div>
 <div class="lock-date" id="lockDate">SAT, OCT 17</div>
@@ -832,7 +1061,7 @@ const I = {
   inshot: 'https://i.ibb.co/4nj5zkBk/icons8-inshot-96.png',
   snapseed: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#4CAF50"/><text x="256" y="330" font-family="Arial" font-weight="700" font-size="180" text-anchor="middle" fill="#fff">Sn</text></svg>`),
   gphotos: 'https://i.ibb.co/DfWqdMZD/icons8-google-photos-96.png',
-  // System icons
+  kcnxflix: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#E50914"/><text x="256" y="310" font-family="Arial Black,sans-serif" font-weight="900" font-size="90" text-anchor="middle" fill="#fff">FLIX</text></svg>`),
   appstore: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#FF9500"/><path d="M180 200 h152 v200 h-152 z" fill="#fff"/><path d="M210 200 v-30 a40 40 0 0 1 80 0 v30" fill="none" stroke="#fff" stroke-width="20"/></svg>`),
   kcnxPlayer: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#ff6b35"/><circle cx="256" cy="256" r="150" fill="none" stroke="#fff" stroke-width="22"/><path d="M210 176 L360 256 L210 336 Z" fill="#fff"/></svg>`),
   settings: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#4a5568"/><g fill="#fff" transform="translate(256,256)"><rect x="-22" y="-160" width="44" height="70" rx="8"/><rect x="-22" y="-160" width="44" height="70" rx="8" transform="rotate(45)"/><rect x="-22" y="-160" width="44" height="70" rx="8" transform="rotate(90)"/><rect x="-22" y="-160" width="44" height="70" rx="8" transform="rotate(135)"/><rect x="-22" y="-160" width="44" height="70" rx="8" transform="rotate(180)"/><rect x="-22" y="-160" width="44" height="70" rx="8" transform="rotate(225)"/><rect x="-22" y="-160" width="44" height="70" rx="8" transform="rotate(270)"/><rect x="-22" y="-160" width="44" height="70" rx="8" transform="rotate(315)"/><circle r="120"/></g><circle cx="256" cy="256" r="55" fill="#4a5568"/></svg>`),
@@ -863,6 +1092,7 @@ const APP_LIST = [
   {name:'Prime Video', icon:I.primevideo, url:'https://primevideo.com'},
   {name:'JioHotstar', icon:I.jiohotstar, url:'https://hotstar.com'},
   {name:'Disney+', icon:I.disneyplus, url:'https://disneyplus.com'},
+  {name:'KCNXFLIX', icon:I.kcnxflix, url:'https://kcnx5730.github.io/km'},
   {name:'Spotify', icon:I.spotify, url:'https://spotify.com'},
   {name:'YouTube Music', icon:I.ytmusic, url:'https://music.youtube.com'},
   {name:'JioSaavn', icon:I.jiosaavn, url:'https://jiosaavn.com'},
@@ -904,7 +1134,6 @@ const APP_LIST = [
   {name:'Lightroom', icon:I.lightroom, url:'https://lightroom.adobe.com'},
   {name:'InShot', icon:I.inshot, url:'https://inshot.com'},
   {name:'Google Photos', icon:I.gphotos, url:'https://photos.google.com'},
-  // System Apps
   {name:'App Store', icon:I.appstore, action:'openAppStore', locked:true},
   {name:'KCNX Player', icon:I.kcnxPlayer, action:'openKcnxPlayer', locked:true},
   {name:'Settings', icon:I.settings, action:'openSettings', locked:true},
@@ -914,7 +1143,6 @@ const APP_LIST = [
   {name:'Files', icon:I.files, action:'openFiles', locked:true}
 ];
 
-// Apps moved to store (No ✔)
 const STORE_APP_LIST = [
   {name:'Signal', icon:I.signal, url:'https://signal.org'},
   {name:'WeChat', icon:I.wechat, url:'https://web.wechat.com'},
@@ -1038,48 +1266,6 @@ const AppLayout = {
   }
 };
 
-// Caching Mechanism for Icons and Wallpapers during Boot
-async function cacheAssets() {
-  const urls = [
-    ...new Set(ALL_APPS.map(a => a.icon).filter(u => u.startsWith('http'))),
-    ...new Set(WALLPAPERS)
-  ];
-  let cachedCount = 0;
-  const start = Date.now();
-  
-  for (const url of urls) {
-    try {
-      const res = await fetch(url);
-      const blob = await res.blob();
-      const reader = new FileReader();
-      const dataUrl = await new Promise((resolve) => {
-        reader.onloadend = () => resolve(reader.result);
-        reader.readAsDataURL(blob);
-      });
-      
-      // Replace the icon URL in ALL_APPS
-      ALL_APPS.forEach(app => {
-        if (app.icon === url) app.icon = dataUrl;
-      });
-      
-      // Replace wallpaper URL
-      const wIdx = WALLPAPERS.indexOf(url);
-      if (wIdx !== -1) WALLPAPERS[wIdx] = dataUrl;
-      
-    } catch (e) {
-      console.warn('Failed to cache asset:', url);
-    }
-    cachedCount++;
-    $('dlProgressBar').style.width = ((cachedCount / urls.length) * 100) + '%';
-    $('dlStatus').textContent = `⏳ Caching: ${cachedCount} / ${urls.length}`;
-  }
-  
-  // Ensure minimum 9 seconds total loading time
-  const elapsed = Date.now() - start;
-  const remaining = Math.max(0, 9000 - elapsed);
-  await new Promise(r => setTimeout(r, remaining));
-}
-
 let searchQuery = '';
 function renderApps(){
   const grid = $('appsGrid');
@@ -1197,6 +1383,151 @@ function openWindow(id){ const w = $(id); if(w) w.classList.add('open'); }
 function closeWindow(id){ const w = $(id); if(w) w.classList.remove('open'); if(id==='win-kcnxplayer') KcnxPlayer.stop(); }
 function closeAll(){ $$('.app-window').forEach(w => { if(w.id==='win-kcnxplayer') KcnxPlayer.stop(); w.classList.remove('open'); }); }
 $$('.window-close').forEach(b => b.addEventListener('click', () => closeWindow(b.dataset.close)));
+
+// Notification System Logic (Now internal to OS)
+const NotificationSystem = {
+  notifications: [],
+  sound: new Audio('https://files.catbox.moe/onqwuv.mp3'),
+  
+  init() {
+    // Add initial wizard notification to history
+    this.add('Welcome Wizard', 'Please read the primary functions for KCNX OS.', false);
+    
+    // Wizard close handler
+    $('wizardClose').addEventListener('click', () => {
+      $('wizardOverlay').classList.remove('show');
+      STORE.set('kcnx_wizard_seen', true);
+    });
+  },
+
+  add(title, message, playSound = true) {
+    this.notifications.unshift({
+      title,
+      message,
+      time: new Date().toLocaleTimeString()
+    });
+    
+    if (playSound) {
+      this.sound.play().catch(e => console.log('Audio play prevented:', e));
+    }
+  }
+};
+
+// Fullscreen Logic
+function updateFullscreenBtn() {
+  const fullscreenBtn = $('fullscreenBtn');
+  const controls = $('topRightControls');
+  
+  // Only show controls if lockScreen is active
+  if (!screens.lock.classList.contains('active')) {
+    controls.style.display = 'none';
+    return;
+  }
+
+  if (document.fullscreenElement) {
+    // When in fullscreen, hide the □ button
+    fullscreenBtn.style.display = 'none';
+    controls.style.display = 'flex';
+  } else {
+    fullscreenBtn.style.display = 'flex';
+    controls.style.display = 'flex';
+  }
+}
+document.addEventListener('fullscreenchange', updateFullscreenBtn);
+$('fullscreenBtn').addEventListener('click', () => {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(err => {
+      console.log(`Error attempting to enable fullscreen: ${err.message}`);
+    });
+  } else {
+    document.exitFullscreen();
+  }
+});
+
+// Draggable Windows Icon
+const winIcon = $('msWindowsIcon');
+let isDraggingWin = false;
+let winStartX, winStartY, winOffsetX = 0, winOffsetY = 0;
+
+winIcon.addEventListener('mousedown', (e) => {
+  isDraggingWin = true;
+  winStartX = e.clientX - winOffsetX;
+  winStartY = e.clientY - winOffsetY;
+  winIcon.style.cursor = 'grabbing';
+});
+
+document.addEventListener('mousemove', (e) => {
+  if (!isDraggingWin) return;
+  e.preventDefault();
+  winOffsetX = e.clientX - winStartX;
+  winOffsetY = e.clientY - winStartY;
+  
+  const rect = winIcon.getBoundingClientRect();
+  const maxX = window.innerWidth - rect.width;
+  const maxY = window.innerHeight - rect.height;
+  
+  winOffsetX = Math.max(0, Math.min(winOffsetX, maxX));
+  winOffsetY = Math.max(0, Math.min(winOffsetY, maxY));
+  
+  winIcon.style.transform = `translate(${winOffsetX}px, ${winOffsetY}px)`;
+});
+
+document.addEventListener('mouseup', () => {
+  isDraggingWin = false;
+  winIcon.style.cursor = 'grab';
+});
+
+// Touch support for Windows Icon
+winIcon.addEventListener('touchstart', (e) => {
+  isDraggingWin = true;
+  const touch = e.touches[0];
+  winStartX = touch.clientX - winOffsetX;
+  winStartY = touch.clientY - winOffsetY;
+}, {passive: true});
+
+document.addEventListener('touchmove', (e) => {
+  if (!isDraggingWin) return;
+  const touch = e.touches[0];
+  winOffsetX = touch.clientX - winStartX;
+  winOffsetY = touch.clientY - winStartY;
+  
+  const rect = winIcon.getBoundingClientRect();
+  const maxX = window.innerWidth - rect.width;
+  const maxY = window.innerHeight - rect.height;
+  
+  winOffsetX = Math.max(0, Math.min(winOffsetX, maxX));
+  winOffsetY = Math.max(0, Math.min(winOffsetY, maxY));
+  
+  winIcon.style.transform = `translate(${winOffsetX}px, ${winOffsetY}px)`;
+}, {passive: false});
+
+document.addEventListener('touchend', () => {
+  isDraggingWin = false;
+});
+
+// Click handler for Windows Icon
+winIcon.addEventListener('click', (e) => {
+  if (Math.abs(winOffsetX) > 5 || Math.abs(winOffsetY) > 5) return;
+  
+  const w = window.open('about:blank', '_blank');
+  if (w) {
+    w.document.open();
+    w.document.write(`
+      <html>
+        <head><title>Redirecting...</title></head>
+        <body style="margin:0;background:#000;color:#fff;display:flex;justify-content:center;align-items:center;height:100vh;font-family:monospace,sans-serif;font-size:24px;text-align:center;user-select:none;">
+          Press CTRL + W or CTRL + F4 to return to the KCNX
+        </body>
+      </html>
+    `);
+    w.document.close();
+    
+    setTimeout(() => {
+      w.location.href = 'https://kcnx.vercel.app';
+    }, 5000);
+  }
+});
+
 
 // Settings App Implementation
 const SettingsApp = {
@@ -1353,6 +1684,7 @@ const SettingsApp = {
         <div class="settings-menu-item active" data-page="system">System Settings</div>
         <div class="settings-menu-item" data-page="about">About User</div>
         <div class="settings-menu-item" data-page="apps">Apps & Programs</div>
+        <div class="settings-menu-item" data-page="notifications">🔔 Notifications</div>
         <div class="settings-menu-item" data-page="security">Lock & Security</div>
         <div class="settings-menu-item" data-page="custom">Customization</div>
         <div class="settings-menu-item" data-page="additional">Additional Settings</div>
@@ -1426,6 +1758,32 @@ const SettingsApp = {
         }
         FileManager.files = [];
         FileManager.render();
+        this.renderContent();
+      });
+    } else if (this.currentPage === 'notifications') {
+      // NEW NOTIFICATIONS TAB IN SETTINGS
+      const notifs = NotificationSystem.notifications;
+      content.innerHTML = `
+        <h2>Notifications</h2>
+        <div class="settings-section">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1cqh; padding-bottom:1cqh; border-bottom:1px solid rgba(255,255,255,0.1);">
+            <span style="font-weight:700;">Notification History</span>
+            <button class="settings-btn" id="clearNotifs" style="padding:0.5cqh 1cqw; font-size:12px;">Clear All</button>
+          </div>
+          <div id="settingsNotifList" style="display:flex; flex-direction:column; max-height:55cqh; overflow-y:auto; padding-right:4px;">
+            ${notifs.length ? notifs.map(n => `
+              <div class="notif-item">
+                <div class="notif-title">${n.title}</div>
+                <div style="color:#ccc;">${n.message}</div>
+                <div class="notif-time">${n.time}</div>
+              </div>
+            `).join('') : '<div style="color:#888;text-align:center;padding:4cqh;">No notifications</div>'}
+          </div>
+        </div>
+      `;
+      const cn = content.querySelector('#clearNotifs');
+      if(cn) cn.addEventListener('click', () => {
+        NotificationSystem.notifications = [];
         this.renderContent();
       });
     } else if (this.currentPage === 'security') {
@@ -1564,9 +1922,11 @@ const AppStore = {
         if (AppLayout.installedStoreApps.includes(id)) {
           AppLayout.installedStoreApps = AppLayout.installedStoreApps.filter(x => x !== id);
           AppLayout.deleted.push(app.name);
+          NotificationSystem.add('App Uninstalled', `${app.name} has been removed.`, true);
         } else {
           AppLayout.installedStoreApps.push(id);
           AppLayout.deleted = AppLayout.deleted.filter(n => n !== app.name);
+          NotificationSystem.add('App Installed', `${app.name} was successfully installed.`, true);
         }
         STORE.set('installed_store_apps', AppLayout.installedStoreApps);
         AppLayout.save();
@@ -1870,7 +2230,7 @@ const Notepad = {
         openWindow('win-custom');
       };
       renderApps();
-      alert('App "'+name+'" added to home screen.');
+      NotificationSystem.add('App Installed', `${name} was successfully created and added.`, true);
     }
     else if(a==='exit') closeWindow('win-notepad');
     else if(a==='undo') document.execCommand('undo');
@@ -1973,6 +2333,7 @@ const FileManager = {
     }
     this.render();
     if($('win-kcnxplayer').classList.contains('open')) KcnxPlayer.refresh();
+    NotificationSystem.add('File Uploaded', `${list.length} file(s) uploaded successfully.`, true);
   },
   async delete(id){
     try{ await DB.delete(id); }catch(e){}
@@ -2028,12 +2389,14 @@ const FileManager = {
 
 function doShutdown(){
   closeAll();
+  $('topRightControls').style.display = 'none'; // Hide icons on shutdown
   const s = $('shutdownScreen');
   s.classList.add('active');
   setTimeout(()=>{ s.innerHTML = '<div style="color:#333;font-size:clamp(11px,1cqw,15px);letter-spacing:.3em">— POWERED OFF —</div>'; }, 2500);
 }
 function doRestart(){
   closeAll();
+  $('topRightControls').style.display = 'none'; // Hide icons on restart
   $('restartScreen').classList.add('active');
   setTimeout(()=>location.reload(), 2000);
 }
@@ -2045,7 +2408,23 @@ function updateClock(){
 }
 let clockIv = null;
 function startClock(){ if(clockIv) clearInterval(clockIv); updateClock(); clockIv = setInterval(updateClock, 1000); }
-function goLock(){ showScreen('lock'); applyWallpaper(WALLPAPERS[currentWallpaper], true); startClock(); $('lockOverlay').classList.add('visible'); }
+
+function goLock(){ 
+  showScreen('lock'); 
+  applyWallpaper(WALLPAPERS[currentWallpaper], true); 
+  startClock(); 
+  $('lockOverlay').classList.add('visible'); 
+  
+  // SHOW TOP RIGHT CONTROLS ONLY WHEN OS LOADS (HOMESCREEN)
+  $('topRightControls').style.display = 'flex'; 
+
+  // SHOW WIZARD ONLY WHEN OS LOADS (HOMESCREEN) AND IF NOT SEEN BEFORE
+  if (!STORE.get('kcnx_wizard_seen', false)) {
+    setTimeout(() => {
+      $('wizardOverlay').classList.add('show');
+    }, 1500); // 1.5 second delay after reaching lock screen
+  }
+}
 
 let homeOpen = false;
 function openHome(){ if(homeOpen) return; homeOpen=true; $('homeScreen').classList.add('open'); renderApps(); }
@@ -2088,8 +2467,44 @@ async function startBooting(){
   $('bootStatus').textContent = 'Starting System...';
   $('dlProgressWrap').classList.add('show');
   
-  // Run 9 second cache
-  await cacheAssets();
+  // Explicitly hide icons just in case
+  $('topRightControls').style.display = 'none';
+  
+  const start = Date.now();
+  
+  // Preload assets in parallel
+  const urls = [
+    ...new Set(ALL_APPS.map(a => a.icon).filter(u => u.startsWith('http'))),
+    ...new Set(WALLPAPERS)
+  ];
+  
+  let completed = 0;
+  const total = urls.length;
+  
+  const loadPromises = urls.map(url => {
+    return new Promise(resolve => {
+      const img = new Image();
+      img.onload = () => { completed++; updateBar(); resolve(); };
+      img.onerror = () => { completed++; updateBar(); resolve(); };
+      img.src = url;
+    });
+  });
+  
+  function updateBar() {
+    $('dlProgressBar').style.width = ((completed / total) * 100) + '%';
+    $('dlStatus').textContent = `⏳ Downloading assets (${completed}/${total})...`;
+  }
+  
+  // Wait for all images OR max 6 seconds
+  const timeoutPromise = new Promise(r => setTimeout(r, 6000));
+  await Promise.race([Promise.all(loadPromises), timeoutPromise]);
+  
+  // Ensure exactly 8 seconds minimum loading time
+  const elapsed = Date.now() - start;
+  const remaining = Math.max(0, 8000 - elapsed);
+  
+  $('dlStatus').textContent = 'Finalizing...';
+  await new Promise(r => setTimeout(r, remaining));
   
   $('bootStatus').textContent = 'Ready!';
   setTimeout(showWelcome, 600);
@@ -2103,6 +2518,7 @@ function showWelcome(){
   video.play().catch(()=>{});
   setTimeout(()=>{
     video.pause();
+    STORE.set('kcnx_has_booted', true);
     goLock();
   }, 6000);
 }
@@ -2114,6 +2530,9 @@ function init(){
   AppStore.updateHomeScreen();
   buildWallpapers();
   renderApps();
+  NotificationSystem.init(); // Init Notification System
+  updateFullscreenBtn(); // Set initial fullscreen button state
+  
   $('appsGrid').style.gridTemplateColumns = 'repeat('+Settings.state.gridCols+',1fr)';
   $('appsGridWrap').style.maxHeight = (Settings.state.gridRows * 110) + 'px';
   const customs = STORE.get('custom_apps', []);
@@ -2122,19 +2541,13 @@ function init(){
 
   // Check if booted before
   if (STORE.get('kcnx_has_booted', false)) {
+    // Direct to Lock Screen (Homescreen) without showing boot manager or welcome video
     goLock();
   } else {
     showScreen('bootManager');
     $('bootInput').focus();
   }
 }
-
-// Mark as booted after first successful boot
-const originalGoLock = goLock;
-goLock = function() {
-  STORE.set('kcnx_has_booted', true);
-  originalGoLock();
-};
 
 init();
 
