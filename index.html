@@ -9,6 +9,7 @@
 html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Open Sans','Georgia',serif;color:#fff;user-select:none;-webkit-user-select:none;touch-action:none;display:flex;align-items:center;justify-content:center;}
 :root{--accent:#8af;--accent2:#4af;--bg:#0e0e12;--panel:#1c1c1e;--border:rgba(255,255,255,.09);}
 .wallpaper-layer{position:fixed;inset:0;z-index:0;background-size:cover;background-position:center;background-repeat:no-repeat;opacity:0;transition:opacity .5s ease;pointer-events:none;}
+.wallpaper-layer video{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
 #brightnessOverlay{position:fixed;inset:0;background:#000;pointer-events:none;z-index:99999;transition:opacity .3s ease;}
 #ghostOverlay{position:fixed;inset:0;background:rgba(0,0,0,0);pointer-events:none;z-index:99998;opacity:0;transition:opacity .5s ease,backdrop-filter .5s ease;}
 #os-container{position:relative;width:min(100vw,calc(100vh*16/9));width:min(100dvw,calc(100dvh*16/9));aspect-ratio:16/9;max-height:100dvh;background:transparent;overflow:hidden;container-type:size;container-name:os;z-index:1;box-shadow:0 0 80px rgba(0,0,0,.95);transition:opacity .5s,filter .5s;}
@@ -45,13 +46,9 @@ body.ghost #ghostOverlay{opacity:1;backdrop-filter:blur(2px);}
 #lockScreen{--panel-w:clamp(300px,28cqw,460px);z-index:2;background:transparent;justify-content:center;align-items:center;position:absolute;}
 #lockScreen .overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;pointer-events:none;z-index:10;background:rgba(0,0,0,.2);opacity:0;transition:opacity 1s ease;}
 #lockScreen .overlay.visible{opacity:1;}
-/* Draggable Windows 11 Icon */
-#msWindowsIcon{position:absolute;top:20%;left:20%;width:clamp(48px,6cqw,80px);height:clamp(48px,6cqw,80px);cursor:grab;z-index:50;transition:transform 0.1s;filter:drop-shadow(0 4px 6px rgba(0,0,0,0.4));}
-#msWindowsIcon:active{cursor:grabbing;transform:scale(0.95);}
-#msWindowsIcon svg{width:100%;height:100%;fill:#0078D7;}
 
 .lock-content{position:absolute;bottom:8cqh;right:6cqw;display:flex;flex-direction:column;align-items:flex-end;text-align:right;z-index:12;pointer-events:none;}
-.lock-time{font-weight:700;font-size:clamp(3rem,9cqw,8rem);letter-spacing:.02em;color:#fff;text-shadow:0 4px 30px rgba(0,0,0,.55);line-height:1;}
+.lock-time{font-family:'Microsoft Sans Serif','Segoe UI',Tahoma,sans-serif;font-weight:700;font-size:clamp(3rem,9cqw,8rem);letter-spacing:.02em;color:#fff;text-shadow:0 4px 30px rgba(0,0,0,.55);line-height:1;}
 .lock-date{font-size:clamp(.85rem,1.6cqw,1.7rem);font-weight:400;letter-spacing:.08em;color:rgba(255,255,255,.88);text-shadow:0 2px 20px rgba(0,0,0,.5);margin-top:.6cqh;text-transform:uppercase;}
 .lock-weather{font-size:clamp(.9rem,1.4cqw,1.5rem);color:rgba(255,255,255,.85);text-shadow:0 2px 20px rgba(0,0,0,.5);margin-top:1.2cqh;letter-spacing:.04em;display:flex;align-items:center;justify-content:flex-end;gap:.8cqw;}
 .lock-weather .temp{font-weight:600;font-size:clamp(1.1rem,2.1cqw,2.3rem);}
@@ -60,6 +57,8 @@ body.ghost #ghostOverlay{opacity:1;backdrop-filter:blur(2px);}
 .bottom-up-arrow img{width:100%;height:100%;object-fit:contain;filter:invert(1) brightness(1.15) drop-shadow(0 2px 8px rgba(0,0,0,.6));opacity:.9;transition:opacity .2s;}
 .bottom-up-arrow:hover img{opacity:1;}
 @keyframes arrowFloat{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-4px)}}
+
+/* Left Panel (Wallpapers) */
 .panel-toggle{position:absolute;top:50%;left:0;transform:translateY(-50%);width:clamp(28px,2.4cqw,42px);height:clamp(44px,5.5cqh,72px);background:rgba(0,0,0,.55);backdrop-filter:blur(10px);border:1px solid var(--border);border-left:none;border-radius:0 12px 12px 0;cursor:pointer;z-index:17;display:flex;align-items:center;justify-content:center;padding:0;transition:left .35s cubic-bezier(.4,0,.2,1),background .2s;-webkit-tap-highlight-color:transparent;}
 .panel-toggle:hover{background:rgba(0,0,0,.75);}
 .panel-toggle img{width:55%;height:55%;object-fit:contain;filter:invert(1) brightness(1.15);transition:transform .35s cubic-bezier(.4,0,.2,1);}
@@ -74,11 +73,39 @@ body.ghost #ghostOverlay{opacity:1;backdrop-filter:blur(2px);}
 @keyframes slowSpin{to{transform:rotate(360deg)}}
 .panel-title{font-size:clamp(9px,.95cqw,15px);letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.7);font-weight:500;}
 .wallpaper-slots{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2cqh 1cqw;}
-.wallpaper-slot{width:100%;aspect-ratio:16/9;background-size:cover;background-position:center;background-repeat:no-repeat;border:2px solid rgba(255,255,255,.15);border-radius:10px;cursor:pointer;padding:0;position:relative;overflow:hidden;transition:border-color .25s,transform .25s,box-shadow .25s;-webkit-tap-highlight-color:transparent;outline:none;}
+.wallpaper-slot{width:100%;aspect-ratio:16/9;background-size:cover;background-position:center;background-repeat:no-repeat;border:2px solid rgba(255,255,255,.15);border-radius:10px;cursor:pointer;padding:0;position:relative;overflow:hidden;transition:border-color .25s,transform .25s,box-shadow .25s;-webkit-tap-highlight-color:transparent;outline:none;display:flex;align-items:center;justify-content:center;}
 .wallpaper-slot:hover{transform:scale(1.05);border-color:rgba(255,255,255,.5);}
 .wallpaper-slot.active{border-color:var(--accent);box-shadow:0 0 18px rgba(138,170,255,.65),inset 0 0 0 1px rgba(138,170,255,.4);transform:scale(1.03);}
-.wallpaper-slot.active::after{content:'✓';position:absolute;top:4px;right:5px;background:var(--accent);color:#001a33;width:1.6em;height:1.6em;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:clamp(8px,.8cqw,13px);font-weight:700;box-shadow:0 2px 6px rgba(0,0,0,.5);}
+.wallpaper-slot.active::after{content:'✓';position:absolute;top:4px;right:5px;background:var(--accent);color:#001a33;width:1.6em;height:1.6em;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:clamp(8px,.8cqw,13px);font-weight:700;box-shadow:0 2px 6px rgba(0,0,0,.5);z-index:2;}
+.wallpaper-slot .play-icon{position:absolute;width:30px;height:30px;background:rgba(0,0,0,0.5);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;z-index:1;backdrop-filter:blur(4px);pointer-events:none;}
+
+/* Right Panel (Quick Settings) */
+.right-panel{position:absolute;top:0;right:0;height:100%;width:var(--panel-w);background:rgba(0,0,0,.62);backdrop-filter:blur(22px);border-left:1px solid var(--border);transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);z-index:15;display:flex;flex-direction:column;padding:3.5cqh 2cqw;gap:2.4cqh;overflow-y:auto;pointer-events:auto;}
+.right-panel.open{transform:translateX(0);}
+.right-panel .panel-header{border-bottom:1px solid var(--border);}
+.right-panel .panel-close{left:0;right:auto;}
+.right-toggle{position:absolute;top:50%;right:0;transform:translateY(-50%);width:clamp(28px,2.4cqw,42px);height:clamp(44px,5.5cqh,72px);background:rgba(0,0,0,.55);backdrop-filter:blur(10px);border:1px solid var(--border);border-right:none;border-radius:12px 0 0 12px;cursor:pointer;z-index:17;display:flex;align-items:center;justify-content:center;padding:0;transition:right .35s cubic-bezier(.4,0,.2,1),background .2s;-webkit-tap-highlight-color:transparent;}
+.right-toggle:hover{background:rgba(0,0,0,.75);}
+.right-toggle img{width:55%;height:55%;object-fit:contain;filter:invert(1) brightness(1.15);transition:transform .35s cubic-bezier(.4,0,.2,1);}
+.right-toggle.open{right:var(--panel-w);}
+.right-toggle.open img{transform:rotate(180deg);}
+
+.quick-section{background:rgba(255,255,255,.05);border-radius:12px;padding:1.5cqh 1.5cqw;margin-bottom:1.5cqh;border:1px solid var(--border);}
+.quick-title{font-size:clamp(10px,0.9cqw,13px);color:#aaa;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1cqh;}
+.quick-row{display:flex;align-items:center;justify-content:space-between;padding:.8cqh 0;font-size:clamp(12px,1.1cqw,15px);}
+.quick-row input[type=range]{width:60%;accent-color:var(--accent);}
+.quick-btn-row{display:flex;gap:1cqw;margin-top:1cqh;}
+.quick-btn{flex:1;padding:1.2cqh;background:rgba(255,255,255,.1);border:1px solid var(--border);border-radius:8px;color:#fff;font-weight:700;cursor:pointer;transition:background 0.2s;}
+.quick-btn:hover{background:rgba(255,255,255,.2);}
+.weather-box{text-align:center;padding:1cqh;}
+.weather-temp{font-size:clamp(24px,2.5cqw,36px);font-weight:700;color:#fff;}
+.weather-desc{font-size:clamp(11px,1cqw,14px);color:#aaa;margin-top:.5cqh;}
+.news-list{display:flex;flex-direction:column;gap:1cqh;}
+.news-item{background:rgba(255,255,255,.05);padding:1cqh;border-radius:6px;font-size:clamp(11px,1cqw,14px);cursor:pointer;}
+.news-item:hover{background:rgba(255,255,255,.1);}
+
 #swipeCatcher{position:absolute;top:0;left:0;width:100%;height:100%;z-index:13;touch-action:none;pointer-events:auto;}
+
 /* Home */
 .home-screen{position:absolute;inset:0;z-index:3;background:rgba(0,0,0,.32);backdrop-filter:blur(4px);transform:translateY(100%);transition:transform .5s cubic-bezier(.22,1,.36,1);display:flex;flex-direction:column;padding:2.4cqh 4cqw 4cqh;touch-action:none;}
 .home-screen.open{transform:translateY(0);}
@@ -330,7 +357,7 @@ body.ghost #ghostOverlay{opacity:1;backdrop-filter:blur(2px);}
   position: absolute;
   top: 2.4cqh;
   right: 2.4cqw;
-  display: none; /* Hidden by default until homescreen is loaded */
+  display: none;
   gap: 1cqw;
   z-index: 9999;
 }
@@ -350,24 +377,8 @@ body.ghost #ghostOverlay{opacity:1;backdrop-filter:blur(2px);}
   transition: background 0.2s, transform 0.1s;
   position: relative;
 }
-.ctrl-btn:hover {
-  background: rgba(255,255,255,0.2);
-}
-.ctrl-btn:active {
-  transform: scale(0.95);
-}
-
-/* Notification Items inside Settings */
-.notif-item {
-  background: rgba(255,255,255,0.05);
-  border-radius: 8px;
-  padding: 1.2cqh 1.4cqw;
-  font-size: clamp(11px, 1cqw, 14px);
-  border-left: 3px solid var(--accent);
-  margin-bottom: 1cqh;
-}
-.notif-title { font-weight: 700; margin-bottom: 0.4cqh; color: #fff; }
-.notif-time { color: #888; font-size: 0.85em; margin-top: 0.4cqh; }
+.ctrl-btn:hover { background: rgba(255,255,255,0.2); }
+.ctrl-btn:active { transform: scale(0.95); }
 
 /* Wizard Overlay */
 #wizardOverlay {
@@ -381,9 +392,7 @@ body.ghost #ghostOverlay{opacity:1;backdrop-filter:blur(2px);}
   justify-content: center;
   padding: 2cqh;
 }
-#wizardOverlay.show {
-  display: flex;
-}
+#wizardOverlay.show { display: flex; }
 .wizard-content {
   background: #ffffff;
   color: #222;
@@ -398,7 +407,6 @@ body.ghost #ghostOverlay{opacity:1;backdrop-filter:blur(2px);}
 }
 .wizard-content::-webkit-scrollbar { width: 8px; }
 .wizard-content::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
-
 .wizard-content h2 {
   display: flex;
   align-items: center;
@@ -428,14 +436,8 @@ body.ghost #ghostOverlay{opacity:1;backdrop-filter:blur(2px);}
   margin-bottom: 1.5cqh;
   color: #333;
 }
-.wizard-content a {
-  color: #0066cc;
-  text-decoration: none;
-  font-weight: 600;
-}
-.wizard-content a:hover {
-  text-decoration: underline;
-}
+.wizard-content a { color: #0066cc; text-decoration: none; font-weight: 600; }
+.wizard-content a:hover { text-decoration: underline; }
 .warn-box {
   background: #fff4e5;
   border-left: 4px solid #ff9800;
@@ -461,11 +463,7 @@ body.ghost #ghostOverlay{opacity:1;backdrop-filter:blur(2px);}
   color: #000;
   font-size: 1.1em;
 }
-.subscribe-list {
-  list-style: none;
-  padding: 0;
-  margin: 1.5cqh 0;
-}
+.subscribe-list { list-style: none; padding: 0; margin: 1.5cqh 0; }
 .subscribe-list li {
   display: flex;
   align-items: center;
@@ -473,11 +471,7 @@ body.ghost #ghostOverlay{opacity:1;backdrop-filter:blur(2px);}
   margin-bottom: 1cqh;
   font-size: clamp(12px, 1.1cqw, 15px);
 }
-.favicon {
-  width: calc(1em + 2px);
-  height: calc(1em + 2px);
-  object-fit: contain;
-}
+.favicon { width: calc(1em + 2px); height: calc(1em + 2px); object-fit: contain; }
 .understood-btn {
   display: block;
   width: 100%;
@@ -492,9 +486,7 @@ body.ghost #ghostOverlay{opacity:1;backdrop-filter:blur(2px);}
   margin-top: 2cqh;
   transition: background 0.2s;
 }
-.understood-btn:hover {
-  background: #005A9E;
-}
+.understood-btn:hover { background: #005A9E; }
 
 /* Developer Mode */
 #devMode{position:fixed;inset:0;z-index:999999;background:#000;display:none;flex-direction:column;font-family:'Courier New',monospace;color:#fff;}
@@ -627,12 +619,7 @@ Press/Type/Enter on the iphone's screen to power shut off...
 <!-- LOCK SCREEN -->
 <div id="lockScreen" class="screen">
 <div class="overlay" id="lockOverlay"></div>
-<!-- Draggable Windows 11 Icon -->
-<div id="msWindowsIcon">
-  <svg viewBox="0 0 88 88" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0 12.4L36.8 7.6v34.8H0V12.4zM40.6 7L88 0v40.6H40.6V7zM0 46.2h36.8v34.8L0 76.2V46.2zM40.6 46.2H88V88l-47.4-6.6V46.2z"/>
-  </svg>
-</div>
+
 <div class="lock-content">
 <div class="lock-time" id="lockTime">10:47</div>
 <div class="lock-date" id="lockDate">SAT, OCT 17</div>
@@ -644,9 +631,18 @@ Press/Type/Enter on the iphone's screen to power shut off...
 <button id="upArrow" class="bottom-up-arrow" aria-label="Open apps" type="button">
 <img src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='18 15 12 9 6 15'/%3E%3C/svg%3E" alt="">
 </button>
+
+<!-- Left Panel Toggle (Wallpapers) -->
 <button id="panelToggle" class="panel-toggle" aria-label="Toggle wallpaper panel" type="button">
 <img src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 18 15 12 9 6'/%3E%3C/svg%3E" alt="">
 </button>
+
+<!-- Right Panel Toggle (Quick Settings) -->
+<button id="rightToggle" class="right-toggle" aria-label="Toggle quick settings panel" type="button">
+<img src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='15 18 9 12 15 6'/%3E%3C/svg%3E" alt="">
+</button>
+
+<!-- Left Wallpaper Panel -->
 <aside id="wallpaperPanel" class="wallpaper-panel" aria-label="Wallpaper selector">
 <div class="panel-header">
 <button class="panel-close" id="panelClose" aria-label="Close panel">✕</button>
@@ -655,6 +651,53 @@ Press/Type/Enter on the iphone's screen to power shut off...
 </div>
 <div class="wallpaper-slots" id="wallpaperSlots"></div>
 </aside>
+
+<!-- Right Quick Settings Panel -->
+<aside id="quickPanel" class="right-panel" aria-label="Quick Settings">
+<div class="panel-header">
+<button class="panel-close" id="quickClose" aria-label="Close panel">✕</button>
+<img class="settings-icon" src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z'/%3E%3C/svg%3E" alt="Quick Settings">
+<span class="panel-title">Quick Settings</span>
+</div>
+
+<div class="quick-section">
+  <div class="quick-title">Display</div>
+  <div class="quick-row">
+    <span>Brightness</span>
+    <input type="range" id="quickBrightness" min="20" max="100" value="100">
+  </div>
+  <div class="quick-row">
+    <span>Volume</span>
+    <input type="range" id="quickVolume" min="0" max="100" value="80">
+  </div>
+</div>
+
+<div class="quick-section">
+  <div class="quick-title">Utilities</div>
+  <div class="quick-btn-row">
+    <button class="quick-btn" id="quickLock">Lock</button>
+    <button class="quick-btn" id="quickRestart">Restart</button>
+    <button class="quick-btn" id="quickShutdown">Shutdown</button>
+  </div>
+</div>
+
+<div class="quick-section">
+  <div class="quick-title">Weather</div>
+  <div class="weather-box" id="quickWeather">
+    <div class="weather-temp" id="qwTemp">--°C</div>
+    <div class="weather-desc" id="qwDesc">Fetching...</div>
+  </div>
+</div>
+
+<div class="quick-section" style="flex:1; display:flex; flex-direction:column;">
+  <div class="quick-title">News</div>
+  <div class="news-list" id="quickNews" style="flex:1; overflow-y:auto;">
+    <div class="news-item">Loading news...</div>
+  </div>
+</div>
+
+</aside>
+
 <div id="swipeCatcher"></div>
 </div>
 
@@ -965,7 +1008,6 @@ const fmtTime = s => {if(!isFinite(s)||s<0)return '0:00';const m=Math.floor(s/60
 const extOf = n => {const p=String(n||'').split('.');return p.length>1?p.pop().toLowerCase():''};
 
 const svgDataUri = svg => 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
-const emojiIcon = (emoji) => svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#fff"/><text x="256" y="350" font-family="Arial" font-size="280" text-anchor="middle" dominant-baseline="central">${emoji}</text></svg>`);
 
 // ------------------- APP ICONS (IMGBB + CLOUDINARY) -------------------
 const I = {
@@ -1062,6 +1104,7 @@ const I = {
   snapseed: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#4CAF50"/><text x="256" y="330" font-family="Arial" font-weight="700" font-size="180" text-anchor="middle" fill="#fff">Sn</text></svg>`),
   gphotos: 'https://i.ibb.co/DfWqdMZD/icons8-google-photos-96.png',
   kcnxflix: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#E50914"/><text x="256" y="310" font-family="Arial Black,sans-serif" font-weight="900" font-size="90" text-anchor="middle" fill="#fff">FLIX</text></svg>`),
+  windows11: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 88 88"><rect width="88" height="88" rx="18" fill="#0078D7"/><path d="M0 12.4L36.8 7.6v34.8H0V12.4zM40.6 7L88 0v40.6H40.6V7zM0 46.2h36.8v34.8L0 76.2V46.2zM40.6 46.2H88V88l-47.4-6.6V46.2z" fill="#fff" transform="scale(0.6) translate(28, 28)"/></svg>`),
   appstore: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#FF9500"/><path d="M180 200 h152 v200 h-152 z" fill="#fff"/><path d="M210 200 v-30 a40 40 0 0 1 80 0 v30" fill="none" stroke="#fff" stroke-width="20"/></svg>`),
   kcnxPlayer: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#ff6b35"/><circle cx="256" cy="256" r="150" fill="none" stroke="#fff" stroke-width="22"/><path d="M210 176 L360 256 L210 336 Z" fill="#fff"/></svg>`),
   settings: svgDataUri(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#4a5568"/><g fill="#fff" transform="translate(256,256)"><rect x="-22" y="-160" width="44" height="70" rx="8"/><rect x="-22" y="-160" width="44" height="70" rx="8" transform="rotate(45)"/><rect x="-22" y="-160" width="44" height="70" rx="8" transform="rotate(90)"/><rect x="-22" y="-160" width="44" height="70" rx="8" transform="rotate(135)"/><rect x="-22" y="-160" width="44" height="70" rx="8" transform="rotate(180)"/><rect x="-22" y="-160" width="44" height="70" rx="8" transform="rotate(225)"/><rect x="-22" y="-160" width="44" height="70" rx="8" transform="rotate(270)"/><rect x="-22" y="-160" width="44" height="70" rx="8" transform="rotate(315)"/><circle r="120"/></g><circle cx="256" cy="256" r="55" fill="#4a5568"/></svg>`),
@@ -1134,6 +1177,7 @@ const APP_LIST = [
   {name:'Lightroom', icon:I.lightroom, url:'https://lightroom.adobe.com'},
   {name:'InShot', icon:I.inshot, url:'https://inshot.com'},
   {name:'Google Photos', icon:I.gphotos, url:'https://photos.google.com'},
+  {name:'Windows 11', icon:I.windows11, action:'openWindows', locked:true},
   {name:'App Store', icon:I.appstore, action:'openAppStore', locked:true},
   {name:'KCNX Player', icon:I.kcnxPlayer, action:'openKcnxPlayer', locked:true},
   {name:'Settings', icon:I.settings, action:'openSettings', locked:true},
@@ -1179,23 +1223,33 @@ const APPS = APP_LIST;
 const STORE_APPS = STORE_APP_LIST.map(a => ({...a, id: 'store_' + a.name.replace(/\s+/g, '_').toLowerCase()}));
 const ALL_APPS = [...APPS, ...STORE_APPS];
 
+// ------------------- WALLPAPERS (Images + Live Videos) -------------------
 const WALLPAPERS = [
-  'https://res.cloudinary.com/oo0zvalp/image/upload/v1790092930/pexels-felix-mittermeier-957010.jpg',
-  'https://res.cloudinary.com/oo0zvalp/image/upload/v1790092917/pexels-eberhardgross-534164.jpg',
-  'https://res.cloudinary.com/oo0zvalp/image/upload/v1790092912/pexels-gije-19233481.jpg',
-  'https://res.cloudinary.com/oo0zvalp/image/upload/v1790092619/cld-sample-2.jpg',
-  'https://res.cloudinary.com/oo0zvalp/image/upload/v1790092613/samples/balloons.jpg',
-  'https://res.cloudinary.com/oo0zvalp/image/upload/v1790092610/samples/landscapes/nature-mountains.jpg',
-  'https://res.cloudinary.com/oo0zvalp/image/upload/v1790938119/1919021-amsterdam-1150319_1920.jpg',
-  'https://res.cloudinary.com/oo0zvalp/image/upload/v1790938132/pexels-steve-29101886.jpg',
-  'https://res.cloudinary.com/oo0zvalp/image/upload/v1790938119/652234-field-5429112_1920.jpg',
-  'https://res.cloudinary.com/oo0zvalp/image/upload/v1790938115/dragon_xxc-nature-9710930_1920.jpg',
-  'https://res.cloudinary.com/oo0zvalp/image/upload/v1790938119/pexels-hitesh-vs-390168734-14774085.jpg',
-  'https://res.cloudinary.com/oo0zvalp/image/upload/v1790938117/tommy_rau-sunset-2739472_1920.jpg',
-  'https://res.cloudinary.com/oo0zvalp/image/upload/v1790938360/pexels-kienvirak-4665189.jpg',
-  'https://res.cloudinary.com/oo0zvalp/image/upload/v1790938392/pexels-eberhardgross-12365962.jpg'
+  // Live Wallpapers (Videos)
+  { type: 'video', url: 'https://assets.mixkit.co/videos/preview/mixkit-stars-in-space-background-1610-large.mp4' },
+  { type: 'video', url: 'https://assets.mixkit.co/videos/preview/mixkit-abstract-technology-particles-background-27619-large.mp4' },
+  { type: 'video', url: 'https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4' },
+  { type: 'video', url: 'https://assets.mixkit.co/videos/preview/mixkit-tree-with-yellow-flowers-1173-large.mp4' },
+  
+  // Existing Scenery & Nature
+  { type: 'image', url: 'https://res.cloudinary.com/oo0zvalp/image/upload/v1790938117/tommy_rau-sunset-2739472_1920.jpg' },
+  { type: 'image', url: 'https://res.cloudinary.com/oo0zvalp/image/upload/v1790092930/pexels-felix-mittermeier-957010.jpg' },
+  { type: 'image', url: 'https://res.cloudinary.com/oo0zvalp/image/upload/v1790092917/pexels-eberhardgross-534164.jpg' },
+  { type: 'image', url: 'https://res.cloudinary.com/oo0zvalp/image/upload/v1790092912/pexels-gije-19233481.jpg' },
+  { type: 'image', url: 'https://res.cloudinary.com/oo0zvalp/image/upload/v1790092619/cld-sample-2.jpg' },
+  { type: 'image', url: 'https://res.cloudinary.com/oo0zvalp/image/upload/v1790092613/samples/balloons.jpg' },
+  { type: 'image', url: 'https://res.cloudinary.com/oo0zvalp/image/upload/v1790092610/samples/landscapes/nature-mountains.jpg' },
+  { type: 'image', url: 'https://res.cloudinary.com/oo0zvalp/image/upload/v1790938119/1919021-amsterdam-1150319_1920.jpg' },
+  
+  // Abstract & Colors
+  { type: 'image', url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1920&auto=format&fit=crop' },
+  { type: 'image', url: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1920&auto=format&fit=crop' },
+  { type: 'image', url: 'https://images.unsplash.com/photo-1557672172-298e090bd0f1?q=80&w=1920&auto=format&fit=crop' },
+  { type: 'image', url: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?q=80&w=1920&auto=format&fit=crop' },
+  { type: 'image', url: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1920&auto=format&fit=crop' },
+  { type: 'image', url: 'https://images.unsplash.com/photo-1508615039623-a25605d2b022?q=80&w=1920&auto=format&fit=crop' }
 ];
-const DEFAULT_WALLPAPER_INDEX=1;
+const DEFAULT_WALLPAPER_INDEX=4; // Sunset image
 
 const STORE = {
   get(k, def){ try{ const v = localStorage.getItem('kcnx_'+k); return v!==null ? JSON.parse(v) : def; }catch(e){ return def; } },
@@ -1231,6 +1285,12 @@ const Settings = {
     if(grid) grid.style.gridTemplateColumns = 'repeat('+this.state.gridCols+',1fr)';
     const audio = $('kcnxAudio');
     if(audio) audio.volume = this.state.muted ? 0 : this.state.volume/100;
+
+    // Update quick settings inputs if they exist
+    const qb = $('quickBrightness');
+    const qv = $('quickVolume');
+    if(qb) qb.value = this.state.brightness;
+    if(qv) qv.value = this.state.volume;
   }
 };
 
@@ -1333,22 +1393,45 @@ let wallpaperLayer = 'B';
 function buildWallpapers(){
   const c = $('wallpaperSlots');
   c.innerHTML = '';
-  WALLPAPERS.forEach((url,i) => {
+  WALLPAPERS.forEach((wp,i) => {
     const b = document.createElement('button');
     b.type='button'; b.className='wallpaper-slot';
     b.dataset.index = i;
-    b.style.backgroundImage = `url("${url}")`;
+    if(wp.type === 'video') {
+        b.innerHTML = `<div class="play-icon">▶</div>`;
+        b.style.backgroundImage = `url("https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=400&auto=format&fit=crop")`; // Placeholder for video thumb
+    } else {
+        b.style.backgroundImage = `url("${wp.url}")`;
+    }
     b.addEventListener('click', ()=> selectWallpaper(i));
     c.appendChild(b);
   });
   updateActiveSlot();
 }
 let currentWallpaper = STORE.get('wallpaper', DEFAULT_WALLPAPER_INDEX);
-function applyWallpaper(url, instant){
+function applyWallpaper(wp, instant){
   const a = $('wallpaperLayerA'), b = $('wallpaperLayerB');
   const next = wallpaperLayer==='A' ? b : a;
   const cur = wallpaperLayer==='A' ? a : b;
-  next.style.backgroundImage = `url("${url}")`;
+  
+  // Cleanup old video in next layer
+  const oldVid = next.querySelector('video');
+  if(oldVid) { oldVid.pause(); oldVid.remove(); }
+  next.style.backgroundImage = ''; // clear image
+
+  if (wp.type === 'video') {
+    const vid = document.createElement('video');
+    vid.src = wp.url;
+    vid.autoplay = true;
+    vid.loop = true;
+    vid.muted = true;
+    vid.playsInline = true;
+    vid.style.cssText = 'width:100%;height:100%;object-fit:cover;position:absolute;inset:0;';
+    next.appendChild(vid);
+  } else {
+    next.style.backgroundImage = `url("${wp.url}")`;
+  }
+
   if(instant){
     next.style.transition='none'; cur.style.transition='none';
     next.style.opacity='1'; cur.style.opacity='0';
@@ -1376,7 +1459,25 @@ const AppActions = {
   openNotepad: () => { openWindow('win-notepad'); Notepad.init(); },
   openBrowser: () => { openWindow('win-browser'); Browser.init(); },
   openFiles: () => { openWindow('win-files'); FileManager.init(); },
-  openAppStore: () => { openWindow('win-appstore'); AppStore.init(); }
+  openAppStore: () => { openWindow('win-appstore'); AppStore.init(); },
+  openWindows: () => {
+    const w = window.open('about:blank', '_blank');
+    if (w) {
+      w.document.open();
+      w.document.write(`
+        <html>
+          <head><title>Redirecting...</title></head>
+          <body style="margin:0;background:#000;color:#fff;display:flex;justify-content:center;align-items:center;height:100vh;font-family:monospace,sans-serif;font-size:24px;text-align:center;user-select:none;">
+            Press CTRL + W or CTRL + F4 to return to the KCNX
+          </body>
+        </html>
+      `);
+      w.document.close();
+      setTimeout(() => {
+        w.location.href = 'https://kcnx.vercel.app';
+      }, 5000);
+    }
+  }
 };
 
 function openWindow(id){ const w = $(id); if(w) w.classList.add('open'); }
@@ -1443,91 +1544,6 @@ $('fullscreenBtn').addEventListener('click', () => {
     document.exitFullscreen();
   }
 });
-
-// Draggable Windows Icon
-const winIcon = $('msWindowsIcon');
-let isDraggingWin = false;
-let winStartX, winStartY, winOffsetX = 0, winOffsetY = 0;
-
-winIcon.addEventListener('mousedown', (e) => {
-  isDraggingWin = true;
-  winStartX = e.clientX - winOffsetX;
-  winStartY = e.clientY - winOffsetY;
-  winIcon.style.cursor = 'grabbing';
-});
-
-document.addEventListener('mousemove', (e) => {
-  if (!isDraggingWin) return;
-  e.preventDefault();
-  winOffsetX = e.clientX - winStartX;
-  winOffsetY = e.clientY - winStartY;
-  
-  const rect = winIcon.getBoundingClientRect();
-  const maxX = window.innerWidth - rect.width;
-  const maxY = window.innerHeight - rect.height;
-  
-  winOffsetX = Math.max(0, Math.min(winOffsetX, maxX));
-  winOffsetY = Math.max(0, Math.min(winOffsetY, maxY));
-  
-  winIcon.style.transform = `translate(${winOffsetX}px, ${winOffsetY}px)`;
-});
-
-document.addEventListener('mouseup', () => {
-  isDraggingWin = false;
-  winIcon.style.cursor = 'grab';
-});
-
-// Touch support for Windows Icon
-winIcon.addEventListener('touchstart', (e) => {
-  isDraggingWin = true;
-  const touch = e.touches[0];
-  winStartX = touch.clientX - winOffsetX;
-  winStartY = touch.clientY - winOffsetY;
-}, {passive: true});
-
-document.addEventListener('touchmove', (e) => {
-  if (!isDraggingWin) return;
-  const touch = e.touches[0];
-  winOffsetX = touch.clientX - winStartX;
-  winOffsetY = touch.clientY - winStartY;
-  
-  const rect = winIcon.getBoundingClientRect();
-  const maxX = window.innerWidth - rect.width;
-  const maxY = window.innerHeight - rect.height;
-  
-  winOffsetX = Math.max(0, Math.min(winOffsetX, maxX));
-  winOffsetY = Math.max(0, Math.min(winOffsetY, maxY));
-  
-  winIcon.style.transform = `translate(${winOffsetX}px, ${winOffsetY}px)`;
-}, {passive: false});
-
-document.addEventListener('touchend', () => {
-  isDraggingWin = false;
-});
-
-// Click handler for Windows Icon
-winIcon.addEventListener('click', (e) => {
-  if (Math.abs(winOffsetX) > 5 || Math.abs(winOffsetY) > 5) return;
-  
-  const w = window.open('about:blank', '_blank');
-  if (w) {
-    w.document.open();
-    w.document.write(`
-      <html>
-        <head><title>Redirecting...</title></head>
-        <body style="margin:0;background:#000;color:#fff;display:flex;justify-content:center;align-items:center;height:100vh;font-family:monospace,sans-serif;font-size:24px;text-align:center;user-select:none;">
-          Press CTRL + W or CTRL + F4 to return to the KCNX
-        </body>
-      </html>
-    `);
-    w.document.close();
-    
-    setTimeout(() => {
-      w.location.href = 'https://kcnx.vercel.app';
-    }, 5000);
-  }
-});
-
 
 // Settings App Implementation
 const SettingsApp = {
@@ -1761,7 +1777,6 @@ const SettingsApp = {
         this.renderContent();
       });
     } else if (this.currentPage === 'notifications') {
-      // NEW NOTIFICATIONS TAB IN SETTINGS
       const notifs = NotificationSystem.notifications;
       content.innerHTML = `
         <h2>Notifications</h2>
@@ -2278,16 +2293,29 @@ const Browser = {
         const cur = d.current_condition[0];
         $('bwTemp').textContent = cur.temp_C + '°C';
         $('bwDesc').textContent = cur.weatherDesc[0].value + ' · ' + cur.humidity + '% humidity';
+        // Update Quick Panel weather as well
+        const qw = $('qwTemp'); const qd = $('qwDesc');
+        if(qw) qw.textContent = cur.temp_C + '°C';
+        if(qd) qd.textContent = cur.weatherDesc[0].value;
       })
       .catch(()=>{ $('bwDesc').textContent = 'Weather unavailable'; });
   },
   loadNews(){
     const topics = ['Technology','Science','Sports','Business','Entertainment','Health','World'];
     const grid = $('browserNews');
-    grid.innerHTML = topics.map(t => `<div class="browser-news-card" data-topic="${t}"><div class="browser-news-title">${t}</div><div class="browser-news-desc">Latest ${t.toLowerCase()} news</div></div>`).join('');
-    grid.querySelectorAll('.browser-news-card').forEach(c=>{
-      c.addEventListener('click', ()=>window.open('https://news.google.com/search?q='+encodeURIComponent(c.dataset.topic),'_blank','noopener'));
-    });
+    const qList = $('quickNews');
+    if(qList) {
+        qList.innerHTML = topics.map(t => `<div class="news-item" data-topic="${t}">${t} News</div>`).join('');
+        qList.querySelectorAll('.news-item').forEach(c=>{
+            c.addEventListener('click', ()=>window.open('https://news.google.com/search?q='+encodeURIComponent(c.dataset.topic),'_blank','noopener'));
+        });
+    }
+    if(grid) {
+        grid.innerHTML = topics.map(t => `<div class="browser-news-card" data-topic="${t}"><div class="browser-news-title">${t}</div><div class="browser-news-desc">Latest ${t.toLowerCase()} news</div></div>`).join('');
+        grid.querySelectorAll('.browser-news-card').forEach(c=>{
+          c.addEventListener('click', ()=>window.open('https://news.google.com/search?q='+encodeURIComponent(c.dataset.topic),'_blank','noopener'));
+        });
+    }
   }
 };
 
@@ -2434,10 +2462,45 @@ $('homeDragHandle').addEventListener('click', ()=>closeHome());
 $('appSearch').addEventListener('input', e=>{ searchQuery = e.target.value; renderApps(); });
 $('appSearchBtn').addEventListener('click', ()=>{ searchQuery = $('appSearch').value; renderApps(); });
 
+// Global click to close panels
+document.addEventListener('click', (e) => {
+  if(panelOpen) {
+    const wPanel = $('wallpaperPanel');
+    const pToggle = $('panelToggle');
+    if (!wPanel.contains(e.target) && !pToggle.contains(e.target)) {
+      panelOpen = false;
+      wPanel.classList.remove('open');
+      pToggle.classList.remove('open');
+    }
+  }
+  if(quickPanelOpen) {
+    const qPanel = $('quickPanel');
+    const rToggle = $('rightToggle');
+    if (!qPanel.contains(e.target) && !rToggle.contains(e.target)) {
+      quickPanelOpen = false;
+      qPanel.classList.remove('open');
+      rToggle.classList.remove('open');
+    }
+  }
+});
+
 // Wallpaper panel close
-$('panelClose').addEventListener('click', ()=>{ panelOpen=false; $('wallpaperPanel').classList.remove('open'); $('panelToggle').classList.remove('open'); });
 let panelOpen = false;
-$('panelToggle').addEventListener('click', ()=>{ panelOpen=!panelOpen; $('wallpaperPanel').classList.toggle('open', panelOpen); $('panelToggle').classList.toggle('open', panelOpen); });
+$('panelClose').addEventListener('click', (e)=>{ e.stopPropagation(); panelOpen=false; $('wallpaperPanel').classList.remove('open'); $('panelToggle').classList.remove('open'); });
+$('panelToggle').addEventListener('click', (e)=>{ e.stopPropagation(); panelOpen=!panelOpen; $('wallpaperPanel').classList.toggle('open', panelOpen); $('panelToggle').classList.toggle('open', panelOpen); if(panelOpen){ quickPanelOpen=false; $('quickPanel').classList.remove('open'); $('rightToggle').classList.remove('open'); } });
+
+// Quick Panel close
+let quickPanelOpen = false;
+$('quickClose').addEventListener('click', (e)=>{ e.stopPropagation(); quickPanelOpen=false; $('quickPanel').classList.remove('open'); $('rightToggle').classList.remove('open'); });
+$('rightToggle').addEventListener('click', (e)=>{ e.stopPropagation(); quickPanelOpen=!quickPanelOpen; $('quickPanel').classList.toggle('open', quickPanelOpen); $('rightToggle').classList.toggle('open', quickPanelOpen); if(quickPanelOpen){ panelOpen=false; $('wallpaperPanel').classList.remove('open'); $('panelToggle').classList.remove('open'); } });
+
+// Quick Settings functionality
+$('quickBrightness').addEventListener('input', (e)=>{ Settings.state.brightness = +e.target.value; Settings.apply(); Settings.save(); });
+$('quickVolume').addEventListener('input', (e)=>{ Settings.state.volume = +e.target.value; Settings.apply(); Settings.save(); });
+$('quickLock').addEventListener('click', ()=>{ closeAll(); goLock(); });
+$('quickRestart').addEventListener('click', ()=>{ if(confirm('Restart?')) { closeAll(); doRestart(); } });
+$('quickShutdown').addEventListener('click', ()=>{ if(confirm('Shutdown?')) { closeAll(); doShutdown(); } });
+
 
 // Swipe to open home
 let sx=0, sy=0;
@@ -2475,7 +2538,7 @@ async function startBooting(){
   // Preload assets in parallel
   const urls = [
     ...new Set(ALL_APPS.map(a => a.icon).filter(u => u.startsWith('http'))),
-    ...new Set(WALLPAPERS)
+    ...WALLPAPERS.filter(wp => wp.type === 'image').map(wp => wp.url)
   ];
   
   let completed = 0;
